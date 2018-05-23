@@ -8,4 +8,5 @@ git config --global alias.br branch
 git config --global alias.unstage 'reset HEAD'
 git config --global alias.last 'log -1'
 git config --global alias.pm 'push origin master'
+git config --global alias.pr 'pull --rebase'
 
