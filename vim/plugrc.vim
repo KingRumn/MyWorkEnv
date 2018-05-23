@@ -24,7 +24,8 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'jiangmiao/auto-pairs'
 Plug 'easymotion/vim-easymotion'
 Plug 'ciaranm/detectindent'
-Plug 'wincent/terminus'
+"暂时去掉该字体，在14.04下会显示异常
+"Plug 'wincent/terminus'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'Shougo/vimshell.vim'
 Plug 'ekalinin/Dockerfile.vim'
