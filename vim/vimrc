@@ -223,4 +223,9 @@ if !has("gui_running")
 	endtry
 endif
 
+vmap <leader>v "+gp  "粘贴并使光标移动到内容之后
+vmap <leader>c "+y   "复制到系统剪贴板
+
 source $HOME/.vimrc.local
+
+
