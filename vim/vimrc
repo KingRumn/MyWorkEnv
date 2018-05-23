@@ -1,3 +1,6 @@
+set directory=~/tmp,/var/tmp,/tmp,. " directory to store swap files
+set undodir=~/tmp,/var/tmp,/tmp,. " directory to store undo files
+set undofile
 runtime! pluginrc.vim
 
 syntax on
@@ -66,7 +69,7 @@ if !has("gui_running")
 	cmap <S-Insert>		<C-R>+
 endif
 
-" let mapleader = "\<Space>"
+let mapleader = ","
 
 " Easier to switch window
 noremap <C-J> <C-W>j
@@ -112,7 +115,7 @@ if has("autocmd")
 				\ setlocal number | setlocal cursorline
 	autocmd VimEnter,FileType * call PluginSetup()
 	autocmd BufEnter,FileType c,cpp,python,sh,java,javascript,perl,ruby,php,vim nested TagbarOpen
-	autocmd BufReadPost * DetectIndent 
+	autocmd BufReadPost * DetectIndent
 	autocmd FilterWritePre * nested if &diff | TagbarClose
 endif
 
@@ -225,6 +228,8 @@ endif
 
 vmap <leader>v "+gp  "粘贴并使光标移动到内容之后
 vmap <leader>c "+y   "复制到系统剪贴板
+
+map <leader><space> :FixWhitespace<cr>
 
 source $HOME/.vimrc.local
 

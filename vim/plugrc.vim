@@ -46,4 +46,5 @@ Plug 'joshdick/onedark.vim'
 Plug 'sjl/badwolf'
 Plug 'jnurmine/Zenburn'
 Plug 'jonathanfilip/vim-lucius'
+Plug 'bronson/vim-trailing-whitespace'
 call plug#end()
