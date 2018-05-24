@@ -18,6 +18,6 @@ Install and configure tmux and bash with powerline fancy prompt.
 ## Install
     make
 This will overwrite your existing .bashrc .bash_profile .vimrc... Make backup first if you want to keep your original files.
-  
+
 ## Update vim plugins and packages
     make update
