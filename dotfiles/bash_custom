@@ -1,0 +1,76 @@
+#!/bin/bash
+#tmux
+tmux_init()
+{
+	tmux new-session -s "work"	 #开启一个会话
+	#tmux new-window -n "proj"		#开启一个窗口
+	#tmux split-window -h			#开启一个竖屏
+	#tmux split-window -v 			#开启一个横屏，并执行top命令
+	#tmux -2 attach-session -d		#tmux -2强制启用256color，连接已开启的tmux
+}
+
+#判断是否已有开启的tmux会话，没有则开启
+if which tmux 2>&1 >/dev/null; then
+	test -z "$TMUX" && (tmux attach || tmux_init)
+fi
+
+export WORK_DIR=~/work
+function __goto()
+{
+	_expath=""
+	for var in $@
+	do
+		_expath="${_expath}${var}.*"
+	done
+echo  $_expath
+	if [ "x${_expath}" == "x" ]
+	then
+		cd ${WORK_DIR}
+		return 0
+	fi
+	_dir=`ls ${WORK_DIR} | grep "${_expath}"`
+	if [ "x${_dir}" == "x" ]
+	then
+		cd ${WORK_DIR}
+		return 0
+	fi
+	cd ${WORK_DIR}/${_dir}
+}
+alias wkp='__goto'
+function __goto_bak()
+{
+	_path=$1
+	if [ "x${_path}" == "x" ]
+	then
+		cd ${WORK_DIR}
+		return 0
+	fi
+	_expath=`echo ${_path} | sed 's/./&\\\\{1,\\\\}.*/g'` 
+	_dir=`ls ${WORK_DIR} | grep ${_expath}`
+	if [ "x${_dir}" == "x" ]
+	then
+		cd ${WORK_DIR}
+		return 0
+	fi
+	cd ${WORK_DIR}/${_dir}
+}
+
+alias wk='__goto_bak'
+
+#repo sync for all
+function __reposync()
+{
+	_currdir=`pwd`
+	cd ${WORK_DIR}
+	for _dir in `ls | grep "wk_*"`; do
+		cd ${WORK_DIR}/${_dir}
+		repo sync
+		echo ${WORK_DIR}/${_dir}
+	done
+	cd ${_currdir}
+}
+
+alias repoall='__reposync'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh"  ] && . "$NVM_DIR/nvm.sh"
