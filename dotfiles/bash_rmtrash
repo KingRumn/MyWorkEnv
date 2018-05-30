@@ -1,0 +1,198 @@
+#!/bin/bash
+
+export HOME_TRASH_PATH=~/.trash
+export TRASH_FILE_LIST=$HOME_TRASH_PATH/.list
+
+function _trash_complete()
+{
+   # COMP_CWORD是系统自动变量，表示当前命令单词索引
+   # 0表示第一个单词，也就是命令本身
+
+   case $COMP_CWORD in
+      0)
+         #仍在完成跟命令，无需处理
+         ;;
+      1)
+         #根命令已经完成，开始补充第一级主命令
+         eval _cmp_${COMP_CWORD[0]}
+         ;;
+      2|*)
+         # 一级主命令已经完成，开始补充下一级
+         eval _cmp_${COMP_CWORD[1]}
+         ;;
+   esac
+}
+
+function _cmp_rr()
+{
+   local cur="${COMP_WORDS[COMP_CWORD]}"
+   local options=`ls $HOME_TRASH_PATH`
+   COMPREPLY=( $(compgen -W "${options}" -- ${cur}) )
+}
+
+complete -F _cmp_rr rr
+
+# 创建回收站
+if [ ! -d "$HOME_TRASH_PATH" ]; then
+   mkdir -p "$HOME_TRASH_PATH"
+fi
+
+# 创建回收记录
+if [ ! -f "$TRASH_FILE_LIST" ]; then
+   touch "$TRASH_FILE_LIST"
+fi
+
+alias rm="trash -d"
+alias rl="trash -l"
+alias rr="trash -r"
+alias rp="trash -p"
+alias rc="trash -c"
+alias rh="trash -h"
+
+function _trash_abort()
+{
+   kill -INT $$
+}
+
+
+# 参数解析
+trash()
+{
+   local arg=$1
+   shift
+   case "$arg" in
+      -d)
+         _trash $@
+         ;;
+      -l)
+         _trash_list
+         ;;
+      -r)
+         _trash_recover $@
+         ;;
+      -c)
+         _trash_clean
+         ;;
+      -p)
+         _trash_path
+         ;;
+      -h)
+         _trash_help
+         ;;
+      *)
+         _trash_help
+         ;;
+   esac
+
+}
+
+# 使用说明
+function _trash_help()
+{
+   echo -e "\033[33m----Usage------\033[0m"
+   echo -e "\033[33m-1- Use "trash -p" or "rp" to list all garbages and real pathes in $HOME_TRASH_PATH\033[0m"
+   echo -e "\033[33m-1- Use "trash -l" or "rl" to list all garbages in $HOME_TRASH_PATH\033[0m"
+   echo -e "\033[33m-1- Use "trash -c" or "rc" to clear all garbages in $HOME_TRASH_PATH\033[0m"
+   echo -e "\033[33m-2- Use "trash -d" or "rm" to mv the file into $HOME_TRASH_PATH\033[0m"
+   echo -e "\033[33m-2- Use "trash -r" to "rr" to mv the file in garbages to current dir\033[0m"
+   echo -e "\033[33m-2- Use "trash -h" to "rh" to show help \033[0m"
+}
+
+# 判断当前文件名是否为绝对路径
+function _is_absolute()
+{
+   if [ -z $@ ]; then
+      return 0
+   fi
+   local _tmp_path=$1
+   if [ "/" = "$_prefix" ]; then
+      return 1
+   else
+      return 0
+   fi
+}
+
+# 替换rm指令移动文件到trash dir中
+function _trash()
+{
+   local trash_path=$HOME_TRASH_PATH
+   local trash_nanme
+   local file_name
+   local file_path
+   for tmp_path in $@;
+   do
+      if [ -z $tmp_path ]; then
+         _trash_help
+         _trash_abort
+      fi
+
+      # 利用IFS分割Unix风格的文件路径
+      local old_ifs="$IFS"
+      IFS="/"
+      local file_array=($tmp_path)
+      IFS="$old_ifs"
+      echo ${file_array[@]}
+      # 数组中最后一个为文件名, 注意冒号后有个空格
+      local length=${#file_array[@]}
+      file_name=${file_array[@]: -1}
+
+      # 指定文件名为"名.日期",避免重名，方便找回
+      trash_name=$file_name.`date +%Y%m%d-%H:%M:%S`
+
+      # 获取第一个字符确认是否为绝对路径
+      local _prefix=${tmp_path:0:1}
+      if [ "/" = $_prefix ]; then
+         file_path=${tmp_path%/$file_name*}
+      else
+         file_path=`pwd`
+      fi
+      echo -e "$trash_name \t\t $file_path" >> $TRASH_FILE_LIST
+      mv $tmp_path $HOME_TRASH_PATH/$trash_name
+   done
+}
+
+# 显示回收站中垃圾清单
+function _trash_list()
+{
+   echo -e "==== Garbage Lists in $HOME_TRASH_PATH ===="
+   _trash_help
+   ls -al  $HOME_TRASH_PATH
+}
+
+# 显示回收站中的垃圾及路径
+function _trash_path()
+{
+   echo -e "------------bakup name---------------recover path"
+   cat $TRASH_FILE_LIST
+}
+
+# 找回回收站相应文件
+function _trash_recover()
+{
+   local rfile_name=
+   local file_name=
+   local file_path=
+   for tmp_path in $@;
+   do
+      if [[ ! -d "$HOME_TRASH_PATH/$tmp_path" ]] && [[ ! -f "$HOME_TRASH_PATH/$tmp_path" ]]; then
+         echo "no such file : $tmp_path"
+         continue
+      fi
+      rfile_name=$tmp_path
+      file_name=${rfile_name%\.*}
+      file_path=`cat $TRASH_FILE_LIST | grep $rfile_name | awk '{print $2}'`
+      sed -i -e "/$rfile_name/d" $TRASH_FILE_LIST
+      mv  $HOME_TRASH_PATH/$rfile_name $file_path/$file_name
+   done
+}
+
+# 清空回收站
+function _trash_clean()
+{
+   echo -ne "\033[33mClear all trashes in $HOME_TRASH_PATH, Sure?[y/n]\033[0m"
+   read confirm
+   if [ $confirm == "y" -o $confirm == "Y" ] ;then
+      /bin/rm -rf $HOME_TRASH_PATH/*
+      /bin/rm -rf $HOME_TRASH_PATH/.* 2>/dev/null
+   fi
+}
