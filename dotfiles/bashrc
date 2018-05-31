@@ -115,8 +115,8 @@ if [ -f ~/.bash_custom ]; then
   . ~/.bash_custom
 fi
 
-if [ -f ~/.bash_rmtrash ]; then
-  . ~/.bash_rmtrash
+if [ -f ~/.bash_trash ]; then
+  . ~/.bash_trash
 fi
 
 # enable programmable completion features (you don't need to enable
