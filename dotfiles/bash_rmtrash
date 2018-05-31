@@ -180,8 +180,8 @@ function _trash_recover()
       fi
       rfile_name=$tmp_path
       file_name=${rfile_name%\.*}
-      file_path=`cat $TRASH_FILE_LIST | grep $rfile_name | awk '{print $2}'`
-      sed -i -e "/$rfile_name/d" $TRASH_FILE_LIST
+      file_path=`cat $TRASH_FILE_LIST | grep "$rfile_name" | awk '{print $2}'`
+      sed -i -e '/${rfile_name}*/d' $TRASH_FILE_LIST
       mv  $HOME_TRASH_PATH/$rfile_name $file_path/$file_name
    done
 }
