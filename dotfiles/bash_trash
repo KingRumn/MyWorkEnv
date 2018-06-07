@@ -2,6 +2,7 @@
 
 export HOME_TRASH_PATH=~/.trash
 export TRASH_FILE_LIST=$HOME_TRASH_PATH/.list
+export TRASH_MV_BACKUP_PATH=$HOME_TRASH_PATH/.backup
 
 function _trash_complete()
 {
@@ -42,7 +43,12 @@ if [ ! -f "$TRASH_FILE_LIST" ]; then
    touch "$TRASH_FILE_LIST"
 fi
 
-alias rm="trash -d"
+# 创建备份文件
+if [ ! -d "$TRASH_MV_BACKUP_PATH" ]; then
+   mkdir -p "$TRASH_MV_BACKUP_PATH"
+fi
+
+alias rm="_aliase_rm"
 alias rl="trash -l"
 alias rr="trash -r"
 alias rp="trash -p"
@@ -54,7 +60,32 @@ function _trash_abort()
    kill -INT $$
 }
 
+# 忽略rm的参数
+function _aliase_rm()
+{
+   local args=()
+   local to_trash=y
+   for arg in "$@"; do
+      args_len=${#args[*]}
+      case $1 in
+         -nb)
+            to_trash=n
+            ;;
+         -*)
+            ;;
+         *)
+            args[$args_len]=$1
+            ;;
+      esac
+      shift
+   done
+   if [ "$to_trash" = "y" ]; then
+      trash -d ${args[@]}
+   else
+      /bin/rm -rf ${args[@]}
+   fi
 
+}
 # 参数解析
 trash()
 {
@@ -177,10 +208,23 @@ function _trash_recover()
       fi
       rfile_name=$tmp_path
       file_name=${rfile_name%\.*}
-      file_path=`cat $TRASH_FILE_LIST | grep "$rfile_name" | awk '{print $2}'`
+      if [ ${rfile_name:0:1} = "-" ]; then
+         tmp_rfile_name="\\"$rfile_name
+      else
+         tmp_rfile_name="$rfile_name"
+      fi
+      file_path=`cat $TRASH_FILE_LIST | grep "$tmp_rfile_name" | awk '{print $2}'`
       sed -i -e '/${rfile_name}*/d' $TRASH_FILE_LIST
       mkdir -p $file_path
-      mv  $HOME_TRASH_PATH/$rfile_name $file_path/$file_name
+      if [ -d "$file_path/$file_name" ]; then
+         mkdir -p $TRASH_MV_BACKUP_PATH && \
+            mv $file_path/$file_name $TRASH_MV_BACKUP_PATH/. && \
+            mv  $HOME_TRASH_PATH/$rfile_name $file_path/$file_name && \
+            /bin/rm -rf $TRASH_MV_BACKUP_PATH
+
+      else
+         mv  $HOME_TRASH_PATH/$rfile_name $file_path/$file_name
+      fi
    done
 }
 
