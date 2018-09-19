@@ -45,7 +45,7 @@ function __goto_bak()
 		cd ${WORK_DIR}
 		return 0
 	fi
-	_expath=`echo ${_path} | sed 's/./&\\\\{1,\\\\}.*/g'` 
+	_expath=`echo ${_path} | sed 's/./&\\\\{1,\\\\}.*/g'`
 	_dir=`ls ${WORK_DIR} | grep ${_expath}`
 	if [ "x${_dir}" == "x" ]
 	then
@@ -72,5 +72,3 @@ function __reposync()
 
 alias repoall='__reposync'
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh"  ] && . "$NVM_DIR/nvm.sh"
