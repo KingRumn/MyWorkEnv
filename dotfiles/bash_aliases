@@ -1,10 +1,28 @@
 #自动启动nvm, 需要正确安装nvm
+#
+# export NVM_DIR="$HOME/.nvm" && (
+#   git clone https://github.com/creationix/nvm.git "$NVM_DIR"
+#   cd "$NVM_DIR"
+#   git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" origin`
+# ) && . "$NVM_DIR/nvm.sh"
+#
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh"  ] && . "$NVM_DIR/nvm.sh"
 
 # advcpmv should be installed properly
-alias cpg='cpg -g'
-alias mvg='mvg -g'
+# wget http://ftp.gnu.org/gnu/coreutils/coreutils-8.21.tar.xz
+# tar xvJf coreutils-8.21.tar.xz
+# cd coreutils-8.21/
+# wget https://raw.githubusercontent.com/schollz/advcpmv/master/advcpmv-0.5-8.21.patch
+# patch -p1 -i advcpmv-0.5-8.21.patch
+# ./configure
+# make
+# sudo mv ./src/cp /usr/local/bin/cpg
+# sudo mv ./src/mv /usr/local/bin/mvg
+command -v cpg >/dev/null 2>&1 && {
+		alias cp='cpg -g'
+		alias mv='mvg -g'
+	}
 
 # 修改PATH路径,增加home/bin
 export PATH="$PATH:$HOME/bin"
