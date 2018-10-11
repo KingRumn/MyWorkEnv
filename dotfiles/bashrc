@@ -129,7 +129,7 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
+function unused {
 if [ -r /usr/share/powerline/bindings/bash/powerline.sh ]; then
   POWERLINE_BASH_CONTINUATION=1
   POWERLINE_BASH_SELECT=1
@@ -149,4 +149,4 @@ else
     . $POWERLINE_DIR/powerline/bindings/bash/powerline.sh
   fi
 fi
-
+}
