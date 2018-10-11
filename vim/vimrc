@@ -1,6 +1,9 @@
 set directory=~/tmp,/var/tmp,/tmp,. " directory to store swap files
 set undodir=~/tmp,/var/tmp,/tmp,. " directory to store undo files
 set undofile
+set directory=~/tmp,/var/tmp,/tmp,. " directory to store swap files
+set undodir=~/tmp,/var/tmp,/tmp,. " directory to store undo files
+set undofile
 runtime! pluginrc.vim
 
 syntax on
@@ -77,19 +80,25 @@ noremap <C-K> <C-W>k
 noremap <C-H> <C-W>h
 noremap <C-L> <C-W>l
 
+" Easier to switch tab
+noremap tp :tabp<CR>
+noremap tn :tabn<CR>
+noremap tl :tabs<CR>
+noremap tc :tabc<CR>
+
 " Easier to switch buffer
 set switchbuf=usetab,newtab
-map gn :bn<cr>
-map gp :bp<cr>
-map gd :bd<cr>
+map bn :bn<cr>
+map bp :bp<cr>
+map bd :bd<cr>
 nnoremap <C-TAB> :sbnext<CR>
 nnoremap <C-S-TAB> :sbprevious<CR>
 
 " Open file explorer
-map ge :Texplore<CR>
+" map ge :Texplore<CR>
 
 " Open buffer explorer
-map gb :BufExplorer<CR>
+map bl :BufExplorer<CR>
 
 " Man
 runtime ftplugin/man.vim
@@ -114,7 +123,7 @@ if has("autocmd")
 	autocmd BufEnter,BufWrite,FileType c,cpp,python,sh,java,javascript,perl,ruby,php,make,vim
 				\ setlocal number | setlocal cursorline
 	autocmd VimEnter,FileType * call PluginSetup()
-	autocmd BufEnter,FileType c,cpp,python,sh,java,javascript,perl,ruby,php,vim nested TagbarOpen
+	"autocmd BufEnter,FileType c,cpp,python,sh,java,javascript,perl,ruby,php,vim nested TagbarOpen
 	autocmd BufReadPost * DetectIndent
 	autocmd FilterWritePre * nested if &diff | TagbarClose
 endif
@@ -181,9 +190,9 @@ command! Gtdiff tabedit %|Gvdiff " git diff in tab
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 " auto cd
