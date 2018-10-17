@@ -1,9 +1,6 @@
 set directory=~/tmp,/var/tmp,/tmp,. " directory to store swap files
 set undodir=~/tmp,/var/tmp,/tmp,. " directory to store undo files
 set undofile
-set directory=~/tmp,/var/tmp,/tmp,. " directory to store swap files
-set undodir=~/tmp,/var/tmp,/tmp,. " directory to store undo files
-set undofile
 runtime! pluginrc.vim
 
 syntax on
@@ -11,6 +8,9 @@ syntax on
 " turn on this option as well
 set background=dark
 
+" show tab/whitespace
+set listchars=tab:>-,space:𐤟,trail:܍,eol:$
+map <F10> :set list!<cr>
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
 if has("autocmd")
