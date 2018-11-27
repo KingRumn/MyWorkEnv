@@ -127,6 +127,7 @@ function _trash_help()
    echo -e "\033[33m-2- Use "trash -d" or "rm" to mv the file into $HOME_TRASH_PATH\033[0m"
    echo -e "\033[33m-2- Use "trash -r" to "rr" to mv the file in garbages to current dir\033[0m"
    echo -e "\033[33m-2- Use "trash -h" to "rh" to show help \033[0m"
+   echo -e "\033[33m-2- Use "rm -nb" to remove completely from disk.\033[0m"
 }
 
 # 判断当前文件名是否为绝对路径
