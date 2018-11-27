@@ -52,7 +52,15 @@ set laststatus=2 " For powerline always show
 set wildmenu
 set autoindent
 set smartindent
+set tabstop=4
+set shiftwidth=4
 set smarttab
+
+" auto expandtab to space
+if has("autocmd")
+	"autocmd BufRead,BufNewFile *.c, *.h set expandtab
+	autocmd FileType c,cpp,h setlocal ts=4 sts=4 sw=4 expandtab
+endif
 
 " termguicolors not working
 " if (has("termguicolors"))
