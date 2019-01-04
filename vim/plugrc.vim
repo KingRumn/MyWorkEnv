@@ -12,6 +12,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'mhinz/vim-grepper'
 Plug 'mhinz/vim-startify'
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable', 'on': [ 'YcmGenerateConfig', 'CCGenerateConfig' ]}
 Plug 'airblade/vim-rooter'

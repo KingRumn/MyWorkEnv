@@ -7,6 +7,7 @@ set background=dark
 " fold settings
 set foldenable              " 开始折叠
 set foldmethod=syntax       " 设置语法折叠
+"set foldmethod=marker
 set foldcolumn=0            " 设置折叠区域的宽度
 setlocal foldlevel=1        " 设置折叠层数为
 set foldlevelstart=99       " 打开文件是默认不折叠代码
@@ -44,6 +45,8 @@ set incsearch		" Incremental search
 set autowrite		" Automatically save before commands like :next and :make
 set hidden		" Hide buffers when they are abandoned
 set mouse=a		" Enable mouse usage (all modes)
+
+set fo-=r		" 关闭粘贴代码时自动注释
 
 set hlsearch " turns on search highlighting
 set tags=./tags;/
@@ -99,19 +102,19 @@ noremap tn :tabn<CR>
 noremap tl :tabs<CR>
 noremap tc :tabc<CR>
 
-" Easier to switch buffer
-set switchbuf=usetab,newtab
-map bn :bn<cr>
-map bp :bp<cr>
-map bd :bd<cr>
-nnoremap <C-TAB> :sbnext<CR>
-nnoremap <C-S-TAB> :sbprevious<CR>
-
 " Open file explorer
 " map ge :Texplore<CR>
 
 " Open buffer explorer
-map bl :BufExplorer<CR>
+map gl :BufExplorer<CR>
+" Easier to switch buffer
+set switchbuf=usetab,newtab
+map gn :bn<cr>
+map gp :bp<cr>
+map gd :bd<cr>
+nnoremap <C-TAB> :sbnext<CR>
+nnoremap <C-S-TAB> :sbprevious<CR>
+
 
 " Man
 runtime ftplugin/man.vim
@@ -167,20 +170,29 @@ function! PluginSetup()
 		nnoremap <leader>gs :Grepper -tool ag -side<cr>
 		nnoremap <leader>*  :Grepper -tool ag -cword -noprompt<cr>
 	endif
-	if exists(":YcmCompleter")
-		let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
-		let g:ycm_autoclose_preview_window_after_completion = 1
-		let g:ycm_autoclose_preview_window_after_insertion = 1
-		let g:ycm_key_invoke_completion = '<C-Tab>'
-		nnoremap <C-I> :YcmCompleter GoTo<CR>
-		nnoremap <Leader>g :YcmCompleter GoToDefinition<CR>
-		nnoremap <Leader>r :YcmCompleter GoToReferences<CR>
-		nnoremap <Leader>h :YcmCompleter GoToInclude<CR>
-		nnoremap <Leader>t :YcmCompleter GetType<CR>
-		nnoremap <Leader>m :YcmCompleter GetDoc<CR>
-		nnoremap <Leader>f :YcmCompleter FixIt<CR>
-		nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+	if exists(":cscope")
+		set csprg=/usr/bin/cscope
+		set csto=1		"0 cscope first, 1 ctags first
+		set cst
+		set nocsverb
+		" add any database in current directory
+		if filereadable("cscope.out")
+			cs add cscope.out
+		" else add database pointed to by environment
+		elseif $CSCOPE_DB != ""
+			cs add $CSCOPE_DB
+		endif
+		set csverb
+		nmap <leader>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+		nmap <leader>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+		nmap <leader>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+		nmap <leader>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+		nmap <leader>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+		nmap <leader>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+		nmap <leader>o :cs find i <C-R>=expand("<cfile>")<CR><CR>
+		nmap <leader>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 	endif
+
 	if exists(":IndentGuidesToggle")
 		"let g:indent_guides_enable_on_vim_startup=1 " 随 vim 自启动
 		let g:indent_guides_start_level=2 "从第二层开始可视化显示缩进
@@ -226,7 +238,7 @@ let g:ctrlp_cmd = 'CtrlPMRU' " MRU file list as ctrlp default
 
 let g:python_highlight_all = 1 " python-syntax
 
-let g:ycm_confirm_extra_conf = 0
+"let g:ycm_confirm_extra_conf = 0
 
 " grepper
 let g:grepper           = {}
