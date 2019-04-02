@@ -43,6 +43,31 @@ function __goto_bak()
 
 alias wk='__goto_bak'
 
+function __goto_dir()
+{
+	_cd_array=("x." "x.." "x-" "x")
+	_cur_dir="."
+	_path=$1
+	for var in ${_cd_array[@]}
+	do
+		if [ "x${_path}" == "${var}" ]
+		then
+			cd ${_path}
+			return 0
+		fi
+	done
+	_expath=`echo ${_path} | sed 's/./&\\\\{1,\\\\}.*/g'`
+	_dir=`ls ${_cur_dir} | grep ${_expath}`
+	if [ "x${_dir}" == "x" ]
+	then
+		cd ${_cur_dir}
+		return 0
+	fi
+	cd ${_cur_dir}/${_dir}
+
+}
+alias cc="__goto_dir"
+
 #repo sync for all
 function __reposync()
 {
