@@ -47,3 +47,35 @@ tmux_init()
 if which tmux 2>&1 >/dev/null; then
 	test -z "$TMUX" && (tmux attach || tmux_init)
 fi
+
+
+# cp file to tftpfiles
+# 必须保证文件夹存在,如果使有意义的花,需要正确安装tftp
+#
+# sudo apt-get install xinetd tftpd tftp
+# service tftp
+# {
+#	protocol        = udp
+#	port            = 69
+#	socket_type     = dgram
+#	wait            = yes
+#	user            = nobody
+#	server          = /usr/sbin/in.tftpd
+#	server_args     = /tftpboot
+#	disable         = no
+#
+# }
+# sudo mkdir /tftpboot
+# sudo chmod -R 777 /tftpboot
+# sudo chown -R nobody /tftpboot
+# sudo /etc/init.d/xinetd start
+# Test
+# tftp 192.168.1.2
+# tftp> get hello.txt
+export TFTP_FILE_DIR=~/common/tftpfiles
+__tftp_cp()
+{
+	file_name=$1
+	cp ${file_name} ${TFTP_FILE_DIR}/
+}
+alias tftpcp='__tftp_cp'
