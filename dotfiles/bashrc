@@ -135,7 +135,7 @@ if ! shopt -oq posix; then
   fi
 fi
 # 去掉powerline 对前导的修改
-function asdfasdf()
+no_need ()
 {
 if [ -r /usr/share/powerline/bindings/bash/powerline.sh ]; then
   POWERLINE_BASH_CONTINUATION=1
@@ -157,4 +157,3 @@ else
   fi
 fi
 }
-
