@@ -172,3 +172,14 @@ function __cd_git_root()
 }
 
 alias kg="__cd_git_root"
+
+# python virtualenv/virtualwrapper
+export WORKON_HOME=$HOME/common/python/virtualenv
+
+
+# java
+
+export JAVA_HOME=/usr/lib/java/jre1.8.0_261 ## 这里要注意目录要换成自己解压的jdk 目录
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:$PATH
