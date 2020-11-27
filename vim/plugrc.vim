@@ -1,8 +1,8 @@
 let g:plug_window = "vertical botright new"
 call plug#begin()
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/nerdcommenter'
+"Plug 'scrooloose/syntastic'
 Plug 'vim-scripts/a.vim', { 'for': ['c', 'h', 'cpp', 'hpp'] }
 Plug 'jlanzarotta/bufexplorer'
 "Plug 'vim-scripts/winmanager'
@@ -17,7 +17,7 @@ Plug 'mhinz/vim-startify'
 "Plug 'rdnetto/YCM-Generator', { 'branch': 'stable', 'on': [ 'YcmGenerateConfig', 'CCGenerateConfig' ]}
 Plug 'airblade/vim-rooter'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'hdima/python-syntax' ", { 'for': 'py' }
+"Plug 'hdima/python-syntax' ", { 'for': 'py' }
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'majutsushi/tagbar'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'

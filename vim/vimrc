@@ -1,6 +1,9 @@
 set directory=~/tmp,/var/tmp,/tmp,. " directory to store swap files
 set undodir=~/tmp,/var/tmp,/tmp,. " directory to store undo files
 set undofile
+set directory=~/tmp,/var/tmp,/tmp,. " directory to store swap files
+set undodir=~/tmp,/var/tmp,/tmp,. " directory to store undo files
+set undofile
 runtime! pluginrc.vim
 
 syntax on
@@ -196,21 +199,23 @@ endfunction
 
 
 " air-line
+set laststatus=2  "永远显示状态栏"
 let g:airline_powerline_fonts = 1
-"let g:Powerline_symbols = 'fancy'
+let g:Powerline_symbols = 'fancy'
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='bubblegum'
 
 "set statusline=%{fugitive#statusline()} " fugitive status
 command! Gtdiff tabedit %|Gvdiff " git diff in tab
 
 " syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"let g:syntastic_always_populate_loc_list = 0
+"let g:syntastic_auto_loc_list = 0
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 0
 
 " auto cd in plugin vim-rooter
 let g:rooter_change_directory_for_non_project_files = 'current'
