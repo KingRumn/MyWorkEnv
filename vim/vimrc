@@ -1,3 +1,6 @@
+set directory=~/tmp,/var/tmp,/tmp,. " directory to store swap files
+set undodir=~/tmp,/var/tmp,/tmp,. " directory to store undo files
+set undofile
 runtime! pluginrc.vim
 
 syntax on
@@ -159,17 +162,6 @@ function! PluginSetup()
 		let g:NERDTreeMouseMode = 2
 		nnoremap <silent> <F6> :NERDTreeToggle<CR>
 	endif
-	if exists(":Grepper")
-		" When search with git, search from top level of the repository
-		"let g:grepper.git =
-		"\ { 'grepprg': 'git grep -nI $* -- `git rev-parse --show-toplevel`' }
-		nmap gs <plug>(GrepperOperator)
-		xmap gs <plug>(GrepperOperator)
-		nnoremap <leader>gg :Grepper -tool git<cr>
-		nnoremap <leader>ga :Grepper -tool ag<cr>
-		nnoremap <leader>gs :Grepper -tool ag -side<cr>
-		nnoremap <leader>*  :Grepper -tool ag -cword -noprompt<cr>
-	endif
 	if exists(":cscope")
 		set csprg=/usr/bin/cscope
 		set csto=1		"0 cscope first, 1 ctags first
@@ -223,7 +215,8 @@ let g:syntastic_check_on_wq = 0
 " auto cd in plugin vim-rooter
 let g:rooter_change_directory_for_non_project_files = 'current'
 let g:rooter_manual_only = 1	"去掉自动切换至根目录，如需切换，执行:Rooter
-let g:rooter_use_lcd = 1
+"let g:rooter_use_lcd = 1
+let g:rooter_cd_cmd="lcd"
 let g:rooter_silent_chdir = 1
 
 " Add spaces after comment delimiters by default
@@ -240,14 +233,6 @@ let g:ctrlp_cmd = 'CtrlPMRU' " MRU file list as ctrlp default
 let g:python_highlight_all = 1 " python-syntax
 
 "let g:ycm_confirm_extra_conf = 0
-
-" grepper
-let g:grepper           = {}
-let g:grepper.tools     = ['git', 'ag', 'grep']
-" let g:grepper.open      = 1
-" let g:grepper.jump      = 1
-let g:grepper.next_tool = '<leader>g'
-let g:grepper.highlight = 1
 
 let g:detectindent_preferred_indent = 4 " specify a preferred indent level when no detection is possible
 
